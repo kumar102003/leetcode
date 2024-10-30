@@ -3,49 +3,56 @@ class Solution {
 public:
  
 
-string solve(string s1, string s2, string op) {
-    int a = stoi(s1);
-    int b = stoi(s2);
-    int res;
+// string solve(string s1, string s2, string op) {
+//     int a = stoi(s1);
+//     int b = stoi(s2);
+//     int res;
 
-    if (op == "+") {
-        res = a + b;
-    } 
-    else if (op == "-") {
-        res = a - b;
-    } 
-    else if (op == "*") {
-        res = a * b;
-    } 
-    else if (op == "/") {
-        res = a / b;
-    } 
-    else {
-        return "";
-    }
+//     if (op == "+") {
+//         res = a + b;
+//     } 
+//     else if (op == "-") {
+//         res = a - b;
+//     } 
+//     else if (op == "*") {
+//         res = a * b;
+//     } 
+//     else if (op == "/") {
+//         res = a / b;
+//     } 
+//     else {
+//         return "";
+//     }
 
-    return to_string(res);
-}
+//     return to_string(res);
+// }
 
     int evalRPN(vector<string>& tokens) {
-     stack<string>st;
+        unordered_map<string,function<int(int,int)>>mp={
+            {"+" , [](int a, int b){return a+b;}},
+            {"-" , [](int a, int b){return a-b;}},
+            {"*" , [](int a, int b){return (long)a*(long)b;}},
+            {"/" , [](int a, int b){return a/b;}}
+            
+        };
+     stack<int>st;
      for( int i = 0  ;i < tokens.size(); i++){
         string str = tokens[i];
-       string ans = "";
+       
         if ( str == "+" || str == "-" || str =="*" || str == "/"){
-           string temp1 = st.top();
+           int temp1 = st.top();
            st.pop();
-           string temp2 = st.top();
+           int temp2 = st.top();
            st.pop();
-           string temp = solve(temp2,temp1,str);
+           int temp = mp[str](temp2,temp1);
            st.push(temp);
         }
         else{
-            st.push(str);
+            st.push(stoi(str));
         }
      }
-     string ans = st.top();
      
-     return stoi(ans);
+     
+     return st.top();
     }
 };
